@@ -1,60 +1,107 @@
 import { useSelector } from 'react-redux';
+import {
+  User2,
+  Mail,
+  DollarSign,
+  CheckCircle,
+  XCircle,
+  Hourglass,
+  BadgeCheck
+} from 'lucide-react';
 
 const BidList = ({ bids, onHire, gigStatus }) => {
   const { loading } = useSelector((state) => state.bids);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {bids.map((bid) => (
         <div
           key={bid._id}
-          className={`border rounded-lg p-4 ${
-            bid.status === 'hired'
-              ? 'bg-green-50 border-green-200'
-              : bid.status === 'rejected'
-              ? 'bg-gray-50 border-gray-200'
-              : 'bg-white border-gray-200'
-          }`}
+          className={`rounded-2xl p-6 border shadow-sm transition hover:shadow-xl hover:-translate-y-1
+            ${
+              bid.status === 'hired'
+                ? 'bg-green-50 border-green-200'
+                : bid.status === 'rejected'
+                ? 'bg-red-50 border-red-200'
+                : 'bg-white/80 backdrop-blur-xl border-gray-200'
+            }
+          `}
         >
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <p className="font-semibold text-gray-900">
+          {/* HEADER: Freelancer + Price */}
+          <div className="flex justify-between items-start mb-4">
+            {/* Freelancer Info */}
+            <div className="space-y-1">
+              <p className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                <User2 className="w-5 h-5 text-gray-700" />
                 {bid.freelancerId?.name || 'Unknown'}
               </p>
-              <p className="text-sm text-gray-500">{bid.freelancerId?.email}</p>
+
+              <p className="flex items-center gap-2 text-sm text-gray-500">
+                <Mail className="w-4 h-4 text-gray-500" />
+                {bid.freelancerId?.email}
+              </p>
             </div>
+
+            {/* Price + Status */}
             <div className="text-right">
-              <p className="text-2xl font-bold text-indigo-600">${bid.price}</p>
+              <p className="flex items-center gap-1 justify-end text-2xl font-bold text-indigo-600">
+                <DollarSign className="w-5 h-5" />
+                {bid.price}
+              </p>
+
               <span
-                className={`inline-block px-2 py-1 text-xs rounded mt-1 ${
-                  bid.status === 'hired'
-                    ? 'bg-green-100 text-green-800'
-                    : bid.status === 'rejected'
-                    ? 'bg-gray-100 text-gray-800'
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}
+                className={`inline-flex items-center gap-1 px-3 py-1 mt-2 text-xs font-semibold rounded-full
+                  ${
+                    bid.status === 'hired'
+                      ? 'bg-green-100 text-green-700'
+                      : bid.status === 'rejected'
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }
+                `}
               >
-                {bid.status}
+                {bid.status === 'hired' && <CheckCircle className="w-4 h-4" />}
+                {bid.status === 'rejected' && <XCircle className="w-4 h-4" />}
+                {bid.status === 'pending' && <Hourglass className="w-4 h-4" />}
+                {bid.status.charAt(0).toUpperCase() + bid.status.slice(1)}
               </span>
             </div>
           </div>
-          <p className="text-gray-700 mb-3">{bid.message}</p>
+
+          {/* Bid Message */}
+          <p className="text-gray-700 mb-4 leading-relaxed">{bid.message}</p>
+
+          {/* ACTIONS */}
           {gigStatus === 'open' && bid.status === 'pending' && (
             <button
               onClick={() => onHire(bid._id)}
               disabled={loading}
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:opacity-50"
+              className="inline-flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-xl font-semibold hover:bg-green-700 transition disabled:opacity-50"
             >
-              {loading ? 'Hiring...' : 'Hire'}
+              {!loading ? (
+                <>
+                  Hire
+                  <BadgeCheck className="w-4 h-4" />
+                </>
+              ) : (
+                'Hiring...'
+              )}
             </button>
           )}
+
+          {/* Status when Gig Assigned */}
           {gigStatus === 'assigned' && (
-            <div className="text-sm text-gray-500 mt-2">
+            <div className="mt-3 text-sm">
               {bid.status === 'hired' && (
-                <span className="text-green-600 font-semibold">✓ Hired</span>
+                <span className="flex items-center gap-1 text-green-700 font-semibold">
+                  <CheckCircle className="w-4 h-4" /> Hired
+                </span>
               )}
+
               {bid.status === 'rejected' && (
-                <span className="text-gray-600">✗ Not selected</span>
+                <span className="flex items-center gap-1 text-gray-600">
+                  <XCircle className="w-4 h-4" /> Not selected
+                </span>
               )}
             </div>
           )}
@@ -65,4 +112,3 @@ const BidList = ({ bids, onHire, gigStatus }) => {
 };
 
 export default BidList;
-

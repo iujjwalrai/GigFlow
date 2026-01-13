@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGig, clearError } from '../store/slices/gigSlice';
+import { FileText, DollarSign, PencilLine, ArrowLeftCircle } from 'lucide-react';
 
 const CreateGig = () => {
   const [formData, setFormData] = useState({
@@ -33,79 +34,94 @@ const CreateGig = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Post a New Gig</h1>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fadeIn">
       
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+      {/* Header */}
+      <h1 className="text-4xl font-extrabold text-gray-900 mb-10 flex items-center gap-3">
+        Post a New Gig
+      </h1>
+
+      {/* Form Container */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white/70 backdrop-blur-xl border border-gray-200 shadow-xl rounded-2xl p-8 hover:shadow-2xl transition"
+      >
+        {/* Error Box */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
             {error}
           </div>
         )}
 
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+        {/* Title */}
+        <div className="mb-6">
+          <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-indigo-600" />
             Title
           </label>
           <input
             type="text"
-            id="title"
             name="title"
             required
             value={formData.title}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="e.g., Need a website developer"
+            placeholder="e.g., Need a MERN stack developer"
+            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition"
           />
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+        {/* Description */}
+        <div className="mb-6">
+          <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+            <PencilLine className="w-5 h-5 text-indigo-600" />
             Description
           </label>
           <textarea
-            id="description"
             name="description"
-            required
             rows="6"
+            required
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="Describe your project in detail..."
+            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition"
           />
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+        {/* Budget */}
+        <div className="mb-8">
+          <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-indigo-600" />
             Budget ($)
           </label>
           <input
             type="number"
-            id="budget"
             name="budget"
-            required
             min="0"
             step="0.01"
+            required
             value={formData.budget}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             placeholder="0.00"
+            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition"
           />
         </div>
 
+        {/* Buttons */}
         <div className="flex gap-4">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            className="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold text-lg hover:bg-indigo-700 transition disabled:opacity-50"
           >
             {loading ? 'Posting...' : 'Post Gig'}
           </button>
+
           <button
             type="button"
             onClick={() => navigate('/browse')}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-xl text-gray-700 bg-gray-50 hover:bg-gray-100 transition"
           >
+            <ArrowLeftCircle className="w-5 h-5" />
             Cancel
           </button>
         </div>
@@ -115,4 +131,3 @@ const CreateGig = () => {
 };
 
 export default CreateGig;
-

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitBid, clearError } from '../store/slices/bidSlice';
 
+import { DollarSign, MessageSquare, SendHorizonal, XCircle } from 'lucide-react';
+
 const BidForm = ({ gigId, onCancel, onSuccess }) => {
   const [formData, setFormData] = useState({
     message: '',
@@ -16,75 +18,93 @@ const BidForm = ({ gigId, onCancel, onSuccess }) => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    if (error) {
-      dispatch(clearError());
-    }
+    if (error) dispatch(clearError());
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await dispatch(submitBid({ ...formData, gigId }));
-    if (!result.error) {
-      onSuccess();
-    }
+    if (!result.error) onSuccess();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h3 className="text-xl font-semibold text-gray-900 mb-4">Submit Your Bid</h3>
-      
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white/70 backdrop-blur-xl border border-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition"
+    >
+      {/* Header */}
+      <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <MessageSquare className="w-6 h-6 text-indigo-600" />
+        Submit Your Bid
+      </h3>
+
+      {/* Error Box */}
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="flex items-center gap-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">
+          <XCircle className="w-4 h-4" />
           {error}
         </div>
       )}
 
+      {/* Bid Price */}
       <div>
-        <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+          <DollarSign className="w-4 h-4 text-indigo-600" />
           Your Price ($)
         </label>
+
         <input
           type="number"
-          id="price"
           name="price"
-          required
           min="0"
           step="0.01"
+          required
           value={formData.price}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           placeholder="0.00"
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition"
         />
       </div>
 
+      {/* Message */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+          <MessageSquare className="w-4 h-4 text-indigo-600" />
           Message
         </label>
+
         <textarea
-          id="message"
           name="message"
-          required
           rows="4"
+          required
           value={formData.message}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          placeholder="Tell the client why you're the right fit for this project..."
+          placeholder="Tell the client why you're the right fit..."
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition"
         />
       </div>
 
+      {/* Buttons */}
       <div className="flex gap-4">
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
         >
-          {loading ? 'Submitting...' : 'Submit Bid'}
+          {loading ? (
+            'Submitting...'
+          ) : (
+            <>
+              Submit Bid
+              <SendHorizonal className="w-4 h-4" />
+            </>
+          )}
         </button>
+
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+          className="inline-flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100 transition"
         >
           Cancel
         </button>
@@ -94,4 +114,3 @@ const BidForm = ({ gigId, onCancel, onSuccess }) => {
 };
 
 export default BidForm;
-
