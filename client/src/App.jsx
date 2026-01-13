@@ -59,11 +59,9 @@ function App() {
         <Navbar />
         <NotificationToast />
         <Routes>
-          <Route path="/login" element={
-            isAuthenticated ? <Navigate to="/" /> : <Login />
+          <Route path="/login" element={<Login />
           } />
-          <Route path="/register" element={
-            isAuthenticated ? <Navigate to="/" /> : <Register />
+          <Route path="/register" element={<Register />
           } />
           <Route path="/" element={<Landing />} />
           <Route path="/browse" element={<BrowseGigs />} />
