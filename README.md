@@ -148,15 +148,24 @@ The frontend will run on `http://localhost:5173`
 
 ## Key Features Implementation
 
-### 1. Transactional Integrity (Bonus 1)
+### 1. Transactional Integrity
 The hiring logic uses MongoDB transactions to ensure atomic updates:
 - When a client hires a freelancer, all operations (updating gig status, hiring bid, rejecting other bids) happen in a single transaction
 - This prevents race conditions where multiple hires could occur simultaneously
 
-### 2. Real-time Notifications (Bonus 2)
+### 2. Real-time Notifications 
 - Socket.io integration for real-time updates
 - When a freelancer is hired, they receive an instant notification
 - Notifications appear as toast messages in the UI
+
+
+### 3. Secure Authentication & Access Control
+
+Used JWT-based authentication with HttpOnly cookies for enhanced security against XSS attacks. Implemented strict ownership checks so only gig owners can view bids or perform hiring, along with input validation and endpoint protection.
+
+### 4. Clean Architecture & Robust State Management
+
+Structured backend code using modular controllers, routes, and middleware. On the frontend, implemented Redux Toolkit for global state management—handling authentication, gigs, and bids with proper loading/error states—resulting in a scalable and maintainable codebase.
 
 ## Usage
 
