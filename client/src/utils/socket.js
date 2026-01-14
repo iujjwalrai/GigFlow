@@ -11,6 +11,7 @@ export const initSocket = (userId) => {
 
   socket = io(API_URL, {
     withCredentials: true,
+    transports: ["websocket"],
   });
 
   // Join user-specific room
